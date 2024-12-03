@@ -1,7 +1,7 @@
 "use server";
 
-import { signIn } from "@/lib/auth";
-import * as authErrors from "@/lib/authErrors";
+import { signIn } from "@/lib/auth/auth";
+import * as authErrors from "@/lib/auth/errors";
 import { isRedirectError } from "next/dist/client/components/redirect";
 
 export async function loginWithEmail(

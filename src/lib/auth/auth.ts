@@ -1,7 +1,7 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
-import * as authErros from "./authErrors";
+import * as authErros from "@/lib/auth/errors";
 
 // Aumentacion del modulo de next auth para soportar nuestras propiedades
 declare module "next-auth" {
