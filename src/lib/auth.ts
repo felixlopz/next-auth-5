@@ -1,18 +1,10 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
-import { InvalidLoginError } from "./authErrors";
+import * as authErros from "./authErrors";
 
 // Aumentacion del modulo de next auth para soportar nuestras propiedades
-
 declare module "next-auth" {
-  // interface Session {
-  //   user: {
-  //     address?: string;
-  //     backendToken?: string;
-  //   } & DefaultSession["user"];
-  // }
-
   interface User {
     address?: string;
     backendToken?: string;
@@ -57,23 +49,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "password", type: "password" },
       },
       authorize: async (credentials) => {
-        try {
-          let user = null;
+        let user = null;
 
-          // logic to verify if the user exists
-          user = await getUserFromDb(
-            credentials.email as string,
-            credentials.password as string
-          );
+        console.log(credentials);
 
-          if (!user) {
-            throw new InvalidLoginError();
-          }
+        // logic to verify if the user exists
+        user = await getUserFromDb(
+          credentials.email as string,
+          credentials.password as string
+        );
 
-          return user;
-        } catch (error) {
-          return null;
+        console.log(user);
+
+        if (!user) {
+          throw new authErros.InvalidLoginError();
         }
+
+        return user;
       },
     }),
   ],
@@ -98,10 +90,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           backendToken: token.backendToken,
         },
       };
-    },
-    redirect: async () => {
-      // Redirect after log in
-      return "/dashboard";
     },
   },
   session: {
