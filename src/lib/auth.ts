@@ -51,15 +51,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         let user = null;
 
-        console.log(credentials);
-
         // logic to verify if the user exists
         user = await getUserFromDb(
           credentials.email as string,
           credentials.password as string
         );
-
-        console.log(user);
 
         if (!user) {
           throw new authErros.InvalidLoginError();
