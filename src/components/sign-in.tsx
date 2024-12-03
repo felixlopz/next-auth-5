@@ -1,5 +1,5 @@
 "use client";
-import { loginWithEmail } from "@/app/actions/auth";
+import { loginWithEmail } from "@/actions/auth";
 import { useState } from "react";
 
 export function SignInForm() {
