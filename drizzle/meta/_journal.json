@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1733271485294,
+      "tag": "0000_milky_calypso",
+      "breakpoints": true
+    }
+  ]
+}
