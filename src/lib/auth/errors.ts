@@ -8,7 +8,9 @@ export class CouldNotParseError extends CredentialsSignin {
   message = "zod could not parse";
 }
 
-export class MemberNotFoundError extends CredentialsSignin {}
+export class MemberNotFoundError extends CredentialsSignin {
+  message = "usuario no existe";
+}
 
 export class MemberNotActiveError extends CredentialsSignin {}
 

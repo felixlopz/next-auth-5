@@ -1,5 +1,5 @@
 import { pgTable, text, varchar, pgEnum } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const userRole = pgEnum("role", ["user", "admin"]);
 
@@ -15,5 +15,8 @@ export const users = pgTable("users", {
 export const insertUserSchema = createInsertSchema(users, {
   email: (schema) => schema.email.email(),
   password: (schema) =>
-    schema.password.min(4, "Password must be at least 4 characters long."),
+    schema.password.min(8, "Password must be at least 8 characters long."),
 });
+
+// Schema for selecting a user - can be used to validate API responses
+export const selectUserSchema = createSelectSchema(users);

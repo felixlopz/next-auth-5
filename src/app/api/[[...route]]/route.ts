@@ -12,7 +12,7 @@ const app = new Hono().basePath("/api").use(
   initAuthConfig(() => ({ providers: [] }))
 );
 
-const routes = app.route("/user", user);
+const routes = app.route("/users", user);
 
 export const GET = handle(app);
 export const POST = handle(app);

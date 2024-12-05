@@ -1,42 +1,21 @@
+import { getUserByEmail } from "@/features/user/actions/get-user";
+import { verifyUserPassword } from "@/features/user/utils/password";
+import * as authErrors from "@/lib/auth/errors";
+
 import NextAuth, { type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { JWT } from "next-auth/jwt";
-import * as authErros from "@/lib/auth/errors";
+
+import { User as SchemaUser } from "@/types";
 
 // Aumentacion del modulo de next auth para soportar nuestras propiedades
 declare module "next-auth" {
-  interface User {
-    address?: string;
-    backendToken?: string;
-  }
+  interface User extends SchemaUser {}
 }
 
+import { JWT } from "next-auth/jwt";
 declare module "next-auth/jwt" {
-  interface JWT {
-    backendToken?: string;
-    address?: string;
-  }
+  interface JWT extends SchemaUser {}
 }
-
-// Servicio backend que autentifica al usuario
-type User = {
-  address?: string;
-  backendToken?: string;
-} & DefaultSession["user"];
-
-const getUserFromDb = async (
-  email: string,
-  password: string
-): Promise<User | null> => {
-  if (email === "felixlopzd@gmail.com" && password === "1234") {
-    return {
-      email: "felixlopzd@gmail.com",
-      name: "Felix",
-      address: "Venezuela",
-      backendToken: "MySuperTokenProvenienteDelBacken",
-    };
-  } else return null;
-};
 
 // Declaracion de la autentifiacion
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -51,14 +30,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         let user = null;
 
-        // logic to verify if the user exists
-        user = await getUserFromDb(
-          credentials.email as string,
-          credentials.password as string
-        );
+        user = await getUserByEmail(credentials.email as string);
 
+        // User does not exists
         if (!user) {
-          throw new authErros.InvalidLoginError();
+          throw new authErrors.MemberNotFoundError();
+        }
+
+        // Password is invalid
+        if (
+          !verifyUserPassword(credentials.password as string, user.password)
+        ) {
+          throw new authErrors.InvalidLoginError();
         }
 
         return user;
@@ -69,8 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt({ token, user }) {
       // user proviene de lo que authorized en credentials
       if (user) {
-        token.backendToken = user.backendToken;
-        token.address = user.address;
+        token.role = user.role;
       }
       return token;
     },
@@ -82,8 +64,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         ...session,
         user: {
           ...session.user,
-          address: token.address,
-          backendToken: token.backendToken,
+          role: token.role,
         },
       };
     },

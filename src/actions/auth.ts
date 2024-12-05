@@ -24,6 +24,10 @@ export async function loginWithEmail(
       return error.message;
     }
 
+    if (error instanceof authErrors.MemberNotFoundError) {
+      return error.message;
+    }
+
     return "Something went wrong while checking your credentials. Please try again later.";
   }
 }
