@@ -1,3 +1,3 @@
 # Todo
 
-- [ ] Custom error messages
+- [x] Custom error messages
