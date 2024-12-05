@@ -1,5 +1,4 @@
 "use client";
-import { loginWithEmail } from "@/actions/auth";
 import { useCreateUser } from "@/features/user/api/use-create-user";
 import Link from "next/link";
 import { useState } from "react";

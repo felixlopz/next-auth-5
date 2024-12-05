@@ -12,6 +12,7 @@ const app = new Hono().basePath("/api").use(
   initAuthConfig(() => ({ providers: [] }))
 );
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const routes = app.route("/users", user);
 
 export const GET = handle(app);

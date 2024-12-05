@@ -2,19 +2,23 @@ import { getUserByEmail } from "@/features/user/actions/get-user";
 import { verifyUserPassword } from "@/features/user/utils/password";
 import * as authErrors from "@/lib/auth/errors";
 
-import NextAuth, { type DefaultSession } from "next-auth";
+import "next-auth/jwt";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-import { User as SchemaUser } from "@/types";
+import { UserRole } from "@/types";
 
 // Aumentacion del modulo de next auth para soportar nuestras propiedades
 declare module "next-auth" {
-  interface User extends SchemaUser {}
+  interface User {
+    role: UserRole;
+  }
 }
 
-import { JWT } from "next-auth/jwt";
 declare module "next-auth/jwt" {
-  interface JWT extends SchemaUser {}
+  interface JWT {
+    role: UserRole;
+  }
 }
 
 // Declaracion de la autentifiacion
@@ -56,7 +60,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token;
     },
-    session({ session, token, user }) {
+    session({ session, token }) {
       // token se usa cuando la estrategia declarada es JWT
       // user se usa cuando la estrategia declarada es Database
 

@@ -28,7 +28,9 @@ export type AuthUser = {
   user?: AdapterUser;
 };
 
-export interface AuthConfig extends Omit<AuthConfigCore, "raw"> {}
+// export interface AuthConfig extends Omit<AuthConfigCore, "raw"> {}
+
+export type AuthConfig = Omit<AuthConfigCore, "raw">;
 
 export type ConfigHandler = (c: Context) => AuthConfig;
 

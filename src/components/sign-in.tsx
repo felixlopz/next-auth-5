@@ -52,7 +52,7 @@ export function SignInForm() {
       />
       <span className="text-rose-500">{signInError}</span>
       <span className="mt-4">
-        Don't have an account yet?{" "}
+        {`Don't have and account yet?`}
         <Link href="/signup" className="underline">
           sign up now!
         </Link>
