@@ -1,9 +1,26 @@
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
+
+const protectedRoutes = ["/dashboard", "/"];
+const publicRoutes = ["/login", "/signup"];
 
 export default auth((req) => {
-  if (!req.auth && req.nextUrl.pathname !== "/login") {
-    const newUrl = new URL("/login", req.nextUrl.origin);
-    return Response.redirect(newUrl);
+  const path = req.nextUrl.pathname;
+  const isProtectedRoute = protectedRoutes.includes(path);
+  const isPublicRoute = publicRoutes.includes(path);
+  const isAuth = req.auth != null;
+
+  // Redirect to /login if the user is not authenticated
+  if (isProtectedRoute && !isAuth) {
+    return Response.redirect(new URL("/login", req.nextUrl));
+  }
+
+  // Redirect to /dashboard if the user is authenticated
+  if (
+    isPublicRoute &&
+    isAuth &&
+    !req.nextUrl.pathname.startsWith("/dashboard")
+  ) {
+    return Response.redirect(new URL("/dashboard", req.nextUrl));
   }
 });
 
