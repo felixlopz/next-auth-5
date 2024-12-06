@@ -1,4 +1,4 @@
-import { pgTable, text, varchar, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, pgEnum, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const userRole = pgEnum("role", ["user", "admin"]);
@@ -9,7 +9,7 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 255 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
   role: userRole().default("user").notNull(),
-  createdAt: text("created_at").default("now()").notNull(), // Default timestamp
+  createdAt: timestamp("created_at").notNull().defaultNow(), // Default timestamp
 });
 
 export const insertUserSchema = createInsertSchema(users, {
