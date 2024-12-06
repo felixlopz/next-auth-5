@@ -1,7 +1,7 @@
 import { pgTable, text, varchar, pgEnum, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-export const userRole = pgEnum("role", ["user", "admin"]);
+export const userRole = pgEnum("userRole", ["user", "admin"]);
 
 export const users = pgTable("users", {
   id: text("id").primaryKey().notNull(), // UUID or other unique identifier
