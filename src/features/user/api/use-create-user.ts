@@ -18,9 +18,7 @@ export const useCreateUser = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
-    onError: (e) => {
-      console.log(e);
-    },
+    onError: (e) => {},
   });
 
   return mutation;
